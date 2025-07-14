@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs'); // <-- Add this line
-require('dotenv').config({ path: __dirname + '/../config.env' });
+require('dotenv').config();
 
 // First 15 skills from the skills list
 const SKILLS = [

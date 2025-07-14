@@ -3,10 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-
+dotenv.config();
 // Load environment variables
-dotenv.config({ path: process.env.NODE_ENV === 'production' ? '.env' : './config.env' });
-
 const app = express();
 
 // Middleware
@@ -29,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skillswap', {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -57,3 +55,4 @@ const PORT =  8088;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
