@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 const AdminAccess = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, api } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [adminKey, setAdminKey] = useState('');
@@ -29,7 +29,7 @@ const AdminAccess = () => {
     setMessage('');
 
     try {
-      const response = await axios.put(`/api/admin/make-admin/${user.email}`);
+      const response = await api.put(`/api/admin/make-admin/${user.email}`);
       setMessage('Successfully made admin! Please refresh the page.');
 
       // Update user context with admin role

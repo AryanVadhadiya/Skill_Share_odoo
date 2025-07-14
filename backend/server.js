@@ -7,17 +7,29 @@ dotenv.config();
 // Load environment variables
 const app = express();
 
+const allowedOrigins = process.env.REACT_APP_ALLOWED_ORIGINS
+  ? process.env.REACT_APP_ALLOWED_ORIGINS.split(',')
+  : [
+      'http://localhost:3000',
+      'http://localhost:3002',
+      'http://localhost:3003',
+      'http://localhost:3001',
+      'http://localhost:3004',
+      'https://skill-swap-frontend.vercel.app',
+      'https://skill-swap-frontend-git-main.vercel.app'
+    ];
+
 // Middleware
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3002',
-    'http://localhost:3003',
-    'http://localhost:3001',
-    'http://localhost:3004',
-    'https://skill-swap-frontend.vercel.app',
-    'https://skill-swap-frontend-git-main.vercel.app'
-  ],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like Postman or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
