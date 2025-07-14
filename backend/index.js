@@ -11,13 +11,22 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://skill-share-odoofrontend-j8rndxo5k-aryan-vadhadiyas-projects.vercel.app',
-    'https://skill-share-odoo.vercel.app',
-    'https://skill-share-odoofrontend-1t4v9wy7v-aryan-vadhadiyas-projects.vercel.app',
-    // Add any other frontend domains you use
-  ],
+  origin: function(origin, callback) {
+    const allowed = [
+      'http://localhost:3000',
+      'https://skill-share-odoo.vercel.app'
+    ];
+    // Allow all your Vercel preview subdomains
+    if (
+      !origin ||
+      allowed.includes(origin) ||
+      /^https:\/\/skill-share-odoofrontend-.*-aryan-vadhadiyas-projects\.vercel\.app$/.test(origin)
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
