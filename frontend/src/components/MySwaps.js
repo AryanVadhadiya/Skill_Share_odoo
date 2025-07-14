@@ -17,7 +17,7 @@ const MySwaps = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await api.get('/api/swaps/my-swaps');
+      const response = await api.get('/swaps/my-swaps');
       setSwaps(response.data);
     } catch (error) {
       console.error('Error fetching swaps:', error);

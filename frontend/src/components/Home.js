@@ -27,7 +27,7 @@ const Home = () => {
   const fetchPublicUsers = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/api/users/browse?page=${currentPage}&limit=${usersPerPage}`);
+      const response = await api.get(`/users/browse?page=${currentPage}&limit=${usersPerPage}`);
       // Support both {users, total} and array response
       const users = Array.isArray(response.data) ? response.data : response.data.users;
       const total = response.data.total || users.length;

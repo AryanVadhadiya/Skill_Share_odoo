@@ -27,7 +27,7 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await api.get('/api/admin/stats');
+      const response = await api.get('/admin/stats');
       setStats(response.data);
     } catch (error) {
       setError('Failed to load statistics');
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await api.get('/api/admin/users');
+      const response = await api.get('/admin/users');
       setUsers(response.data);
     } catch (error) {
       setError('Failed to load users');
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
 
   const fetchSwaps = async () => {
     try {
-      const response = await api.get('/api/admin/swaps');
+      const response = await api.get('/admin/swaps');
       setSwaps(response.data);
     } catch (error) {
       setError('Failed to load swaps');
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await api.get('/api/admin/messages');
+      const response = await api.get('/admin/messages');
       setMessages(response.data);
     } catch (error) {
       setError('Failed to load messages');
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
   const fetchSkillDescriptions = async () => {
     setModerationLoading(true);
     try {
-      const res = await api.get('/api/users/skills/descriptions');
+      const res = await api.get('/users/skills/descriptions');
       setSkillDescriptions(res.data);
     } catch (e) {
       setError('Failed to load skill descriptions');
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await api.get('/api/admin/analytics');
+      const response = await api.get('/admin/analytics');
       setAnalytics(response.data);
     } catch (error) {
       setError('Failed to load analytics');
@@ -154,7 +154,7 @@ const AdminDashboard = () => {
   const downloadReport = async (reportType, format = 'csv') => {
     setReportLoading(true);
     try {
-      const response = await api.get(`/api/admin/reports/${reportType}/download?format=${format}`, {
+      const response = await api.get(`/admin/reports/${reportType}/download?format=${format}`, {
         responseType: 'blob'
       });
 

@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     const loadUser = async () => {
       if (token) {
         try {
-          const res = await api.get('/api/auth/me');
+          const res = await api.get('/auth/me');
           setUser(res.data);
         } catch (error) {
           localStorage.removeItem('token');
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await api.post('/api/auth/login', { email, password });
+      const res = await api.post('/auth/login', { email, password });
       const { token: newToken, user: userData } = res.data;
 
       localStorage.setItem('token', newToken);
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const res = await api.post('/api/auth/register', userData);
+      const res = await api.post('/auth/register', userData);
       const { token: newToken, user: newUser } = res.data;
 
       localStorage.setItem('token', newToken);

@@ -25,7 +25,7 @@ const UserDetail = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await api.get(`/api/users/${id}`);
+      const response = await api.get(`/users/${id}`);
       setUser(response.data);
     } catch (error) {
       setError(error.response?.data?.message || 'Failed to load user');

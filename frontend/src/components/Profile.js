@@ -28,7 +28,7 @@ const Profile = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await api.get('/api/auth/me');
+      const response = await api.get('/auth/me');
       setProfile(response.data);
       setFormData({
         name: response.data.name,
