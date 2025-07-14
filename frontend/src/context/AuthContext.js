@@ -4,7 +4,7 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 // Create axios instance with base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || '';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || '';
 const api = axios.create({
   baseURL: API_BASE_URL
 });
