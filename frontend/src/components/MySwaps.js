@@ -30,6 +30,8 @@ const MySwaps = () => {
   useEffect(() => {
     if (user) {
       fetchSwaps();
+      const interval = setInterval(fetchSwaps, 15000); // Poll every 15 seconds
+      return () => clearInterval(interval);
     }
   }, [user, fetchSwaps]);
 
