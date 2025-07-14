@@ -81,7 +81,7 @@ const Home = () => {
 
     try {
       setRequestLoading(true);
-      await api.post('/api/swaps', {
+      await api.post('/swaps', {
         recipientId: selectedUser._id,
         skillOffered: requestForm.skillOffered,
         skillRequested: requestForm.skillRequested,

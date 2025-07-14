@@ -83,7 +83,7 @@ const Profile = () => {
     setLoading(true);
 
     try {
-      const response = await api.put('/api/users/profile', formData);
+      const response = await api.put('/users/profile', formData);
       setProfile(response.data);
       updateUser(response.data);
       setSuccess('Profile updated successfully!');
@@ -104,7 +104,7 @@ const Profile = () => {
 
     try {
       setError('');
-      const response = await api.post(`/api/users/skills-${type}`, { skill: skill.trim() });
+      const response = await api.post(`/users/skills-${type}`, { skill: skill.trim() });
       console.log('Skill added successfully:', response.data);
       setFormData(prev => ({
         ...prev,
@@ -120,7 +120,7 @@ const Profile = () => {
   const removeSkill = async (type, skill) => {
     try {
       setError('');
-      const response = await api.delete(`/api/users/skills-${type}/${encodeURIComponent(skill)}`);
+      const response = await api.delete(`/users/skills-${type}/${encodeURIComponent(skill)}`);
       setFormData(prev => ({
         ...prev,
         [`skills${type.charAt(0).toUpperCase() + type.slice(1)}`]: response.data
@@ -141,7 +141,7 @@ const Profile = () => {
     try {
       setError('');
       setSuccess('');
-      const response = await api.post('/api/auth/upload-photo', formData, {
+      const response = await api.post('/auth/upload-photo', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setProfile(response.data);

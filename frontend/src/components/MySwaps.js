@@ -36,7 +36,7 @@ const MySwaps = () => {
   const handleSwapAction = async (swapId, action) => {
     try {
       setError('');
-      await api.put(`/api/swaps/${swapId}/${action}`);
+      await api.put(`/swaps/${swapId}/${action}`);
       await fetchSwaps();
     } catch (error) {
       console.error(`Error ${action}ing swap:`, error);
@@ -48,7 +48,7 @@ const MySwaps = () => {
     if (window.confirm('Are you sure you want to delete this request?')) {
       try {
         setError('');
-        await api.put(`/api/swaps/${swapId}/cancel`);
+        await api.put(`/swaps/${swapId}/cancel`);
         await fetchSwaps();
       } catch (error) {
         console.error('Error deleting swap:', error);
@@ -73,7 +73,7 @@ const MySwaps = () => {
   const handleMarkCompleted = async (swapId) => {
     try {
       setError('');
-      await api.put(`/api/swaps/${swapId}/complete`);
+      await api.put(`/swaps/${swapId}/complete`);
       await fetchSwaps();
     } catch (error) {
       console.error('Error marking swap as completed:', error);

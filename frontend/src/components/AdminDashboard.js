@@ -77,7 +77,7 @@ const AdminDashboard = () => {
 
   const handleBanUser = async (userId, isBanned) => {
     try {
-      await api.put(`/api/admin/users/${userId}/ban`, { isBanned });
+      await api.put(`/admin/users/${userId}/ban`, { isBanned });
       fetchUsers();
       fetchStats();
     } catch (error) {
@@ -88,7 +88,7 @@ const AdminDashboard = () => {
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/api/admin/messages', newMessage);
+      await api.post('/admin/messages', newMessage);
       setNewMessage({ title: '', content: '', type: 'info' });
       fetchMessages();
     } catch (error) {
@@ -98,7 +98,7 @@ const AdminDashboard = () => {
 
   const handleRejectDescription = async (userId, skill) => {
     try {
-      await api.delete(`/api/users/skills-offered/${userId}/${skill}/description`);
+      await api.delete(`/users/skills-offered/${userId}/${skill}/description`);
       fetchSkillDescriptions();
     } catch (e) {
       setError('Failed to reject skill description');
@@ -107,7 +107,7 @@ const AdminDashboard = () => {
 
   const handleSwapAction = async (swapId, action) => {
     try {
-      await api.put(`/api/swaps/${swapId}/${action}`);
+      await api.put(`/swaps/${swapId}/${action}`);
       fetchSwaps();
     } catch (error) {
       setError(error.response?.data?.message || `Failed to ${action} swap`);

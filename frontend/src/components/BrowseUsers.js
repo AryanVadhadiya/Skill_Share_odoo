@@ -37,7 +37,7 @@ const BrowseUsers = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      let url = '/api/users/browse';
+      let url = '/users/browse';
       const params = new URLSearchParams();
 
       if (searchTerm) params.append('skill', searchTerm);
@@ -114,7 +114,7 @@ const BrowseUsers = () => {
 
     try {
       setRequestLoading(true);
-      await api.post('/api/swaps', {
+      await api.post('/swaps', {
         recipientId: selectedUser._id,
         skillOffered: requestForm.skillOffered,
         skillRequested: requestForm.skillRequested,

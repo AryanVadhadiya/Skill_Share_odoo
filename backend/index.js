@@ -7,6 +7,8 @@ const swapRoutes = require('./routes/swaps');
 const adminRoutes = require('./routes/admin');
 const config = require('./config');
 require('dotenv').config();
+const connectDB = require('./connectDB');
+connectDB();
 
 const app = express();
 
