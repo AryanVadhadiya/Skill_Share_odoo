@@ -4,8 +4,12 @@ const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
 const { adminAuth } = require('../middleware/adminAuth');
+const config = require('../config');
+require('dotenv').config();
 
 const router = express.Router();
+
+const USERS_PER_PAGE = parseInt(process.env.USERS_PER_PAGE, 10) || config.pagination.usersPerPage;
 
 // Optional auth middleware for browse endpoint
 const optionalAuth = async (req, res, next) => {
@@ -43,7 +47,7 @@ router.get('/browse', optionalAuth, async (req, res) => {
     }
 
     let page = parseInt(req.query.page) || 1;
-    let limit = parseInt(req.query.limit) || 4;
+    let limit = parseInt(req.query.limit) || USERS_PER_PAGE;
     let skip = (page - 1) * limit;
 
     // Get all public users

@@ -1,15 +1,17 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
+    { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/server.js"
-    }
-  ]
+    { "src": "/(.*)", "dest": "/server.js" }
+  ],
+  "env": {
+    "PORT": "5000",
+    "CLOUDINARY_CLOUD_NAME": "",
+    "CLOUDINARY_API_KEY": "",
+    "CLOUDINARY_API_SECRET": "",
+    "JWT_SECRET": "",
+    "REACT_APP_ALLOWED_ORIGINS": "http://localhost:3000"
+  }
 }

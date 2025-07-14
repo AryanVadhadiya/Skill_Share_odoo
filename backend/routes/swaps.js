@@ -4,6 +4,7 @@ const User = require('../models/User');
 const { auth } = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
 const { adminAuth } = require('../middleware/adminAuth');
+const config = require('../config');
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ router.post('/', auth, [
                 { requester: req.user._id, recipient: recipientId },
                 { requester: recipientId, recipient: req.user._id }
             ],
-            status: 'pending'
+            status: config.swapStatus.pending
         });
 
         if (existingSwap) {
@@ -106,11 +107,11 @@ router.put('/:id/accept', auth, async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to accept this swap' });
         }
 
-        if (swap.status !== 'pending') {
+        if (swap.status !== config.swapStatus.pending) {
             return res.status(400).json({ message: 'Swap is not pending' });
         }
 
-        swap.status = 'accepted';
+        swap.status = config.swapStatus.accepted;
         await swap.save();
 
         const populatedSwap = await Swap.findById(swap._id)
@@ -137,11 +138,11 @@ router.put('/:id/reject', auth, async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to reject this swap' });
         }
 
-        if (swap.status !== 'pending') {
+        if (swap.status !== config.swapStatus.pending) {
             return res.status(400).json({ message: 'Swap is not pending' });
         }
 
-        swap.status = 'rejected';
+        swap.status = config.swapStatus.rejected;
         await swap.save();
 
         const populatedSwap = await Swap.findById(swap._id)
@@ -168,11 +169,11 @@ router.put('/:id/cancel', auth, async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to cancel this swap' });
         }
 
-        if (swap.status !== 'pending') {
+        if (swap.status !== config.swapStatus.pending) {
             return res.status(400).json({ message: 'Can only cancel pending swaps' });
         }
 
-        swap.status = 'cancelled';
+        swap.status = config.swapStatus.cancelled;
         await swap.save();
 
         const populatedSwap = await Swap.findById(swap._id)
@@ -204,11 +205,11 @@ router.put('/:id/complete', auth, async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to complete this swap' });
         }
 
-        if (swap.status !== 'accepted') {
+        if (swap.status !== config.swapStatus.accepted) {
             return res.status(400).json({ message: 'Can only complete accepted swaps' });
         }
 
-        swap.status = 'completed';
+        swap.status = config.swapStatus.completed;
         swap.completedAt = new Date();
         await swap.save();
 
@@ -230,7 +231,7 @@ router.post('/:id/rate', auth, async (req, res) => {
     if (![1,2,3,4,5].includes(rating)) return res.status(400).json({ message: 'Invalid rating' });
 
     const swap = await Swap.findById(req.params.id);
-    if (!swap || swap.status !== 'completed') return res.status(404).json({ message: 'Swap not found or not completed' });
+    if (!swap || swap.status !== config.swapStatus.completed) return res.status(404).json({ message: 'Swap not found or not completed' });
 
     if (forRole === 'recipient' && swap.recipient.toString() !== req.user._id.toString()) return res.status(403).json({ message: 'Not authorized' });
     if (forRole === 'requester' && swap.requester.toString() !== req.user._id.toString()) return res.status(403).json({ message: 'Not authorized' });
@@ -257,7 +258,7 @@ async function updateUserRating(userId) {
   try {
     const swaps = await Swap.find({
       $or: [{ requester: userId }, { recipient: userId }],
-      status: 'completed'
+      status: config.swapStatus.completed
     });
 
     let ratings = [];

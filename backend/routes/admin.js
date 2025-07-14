@@ -4,15 +4,20 @@ const Swap = require('../models/Swap');
 const Message = require('../models/Message');
 const { adminAuth } = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
+const config = require('../config');
+require('dotenv').config();
 
 const router = express.Router();
+
+const ADMIN_ROLE_NAME = process.env.ADMIN_ROLE_NAME || config.defaultAdminRole;
+const ADMIN_MESSAGE_TYPES = (process.env.ADMIN_MESSAGE_TYPES || config.messageTypes.join(',')).split(',');
 
 // Make user admin (for testing purposes)
 router.put('/make-admin/:email', async (req, res) => {
     try {
         const user = await User.findOneAndUpdate(
             { email: req.params.email },
-            { role: 'admin' },
+            { role: ADMIN_ROLE_NAME },
             { new: true }
         ).select('-password');
 
@@ -102,7 +107,7 @@ router.get('/stats', adminAuth, async (req, res) => {
 router.post('/messages', adminAuth, [
     body('title').trim().notEmpty().withMessage('Title is required'),
     body('content').trim().notEmpty().withMessage('Content is required'),
-    body('type').isIn(['info', 'warning', 'alert', 'update']).withMessage('Invalid message type')
+    body('type').isIn(ADMIN_MESSAGE_TYPES).withMessage('Invalid message type')
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -231,7 +236,7 @@ router.get('/reports/swap-stats', adminAuth, async (req, res) => {
         }
 
         const swaps = await Swap.find(dateFilter);
-        
+
         const stats = {
             period: { startDate, endDate },
             totalSwaps: swaps.length,
@@ -240,7 +245,7 @@ router.get('/reports/swap-stats', adminAuth, async (req, res) => {
             completedSwaps: swaps.filter(swap => swap.status === 'completed').length,
             rejectedSwaps: swaps.filter(swap => swap.status === 'rejected').length,
             cancelledSwaps: swaps.filter(swap => swap.status === 'cancelled').length,
-            completionRate: swaps.length > 0 ? 
+            completionRate: swaps.length > 0 ?
                 (swaps.filter(swap => swap.status === 'completed').length / swaps.length * 100).toFixed(2) : 0
         };
 
@@ -256,13 +261,13 @@ router.get('/reports/user-activity/download', adminAuth, async (req, res) => {
     try {
         const { format = 'json' } = req.query;
         const users = await User.find({}).select('-password').sort({ createdAt: -1 });
-        
+
         if (format === 'csv') {
             const csvHeader = 'Name,Email,Location,Rating,Total Ratings,Skills Offered,Skills Wanted,Is Banned,Is Public,Created At\n';
             const csvData = users.map(user => {
                 return `"${user.name}","${user.email}","${user.location || ''}","${user.rating}","${user.totalRatings}","${user.skillsOffered.join('; ')}","${user.skillsWanted.join('; ')}","${user.isBanned}","${user.isPublic}","${user.createdAt}"`;
             }).join('\n');
-            
+
             res.setHeader('Content-Type', 'text/csv');
             res.setHeader('Content-Disposition', 'attachment; filename=user-activity-report.csv');
             res.send(csvHeader + csvData);
@@ -284,13 +289,13 @@ router.get('/reports/user-activity/download', adminAuth, async (req, res) => {
 router.get('/reports/feedback-logs/download', adminAuth, async (req, res) => {
     try {
         const { format = 'json' } = req.query;
-        const swaps = await Swap.find({ 
-            $or: [{ requesterRating: { $exists: true } }, { recipientRating: { $exists: true } }] 
+        const swaps = await Swap.find({
+            $or: [{ requesterRating: { $exists: true } }, { recipientRating: { $exists: true } }]
         })
         .populate('requester', 'name email')
         .populate('recipient', 'name email')
         .sort({ createdAt: -1 });
-        
+
         const feedbackData = [];
         swaps.forEach(swap => {
             if (swap.requesterRating) {
@@ -318,20 +323,20 @@ router.get('/reports/feedback-logs/download', adminAuth, async (req, res) => {
                 });
             }
         });
-        
+
         if (format === 'csv') {
             const csvHeader = 'Swap ID,Rater,Rated,Rating,Comment,Date,Skill Offered,Skill Requested\n';
             const csvData = feedbackData.map(feedback => {
                 return `"${feedback.swapId}","${feedback.rater}","${feedback.rated}","${feedback.rating}","${feedback.comment || ''}","${feedback.date}","${feedback.skillOffered}","${feedback.skillRequested}"`;
             }).join('\n');
-            
+
             res.setHeader('Content-Type', 'text/csv');
             res.setHeader('Content-Disposition', 'attachment; filename=feedback-logs-report.csv');
             res.send(csvHeader + csvData);
         } else {
             res.json({
                 totalFeedback: feedbackData.length,
-                averageRating: feedbackData.length > 0 ? 
+                averageRating: feedbackData.length > 0 ?
                     (feedbackData.reduce((sum, f) => sum + f.rating, 0) / feedbackData.length).toFixed(2) : 0,
                 feedback: feedbackData
             });
@@ -350,7 +355,7 @@ router.get('/reports/swap-stats/download', adminAuth, async (req, res) => {
             .populate('requester', 'name email')
             .populate('recipient', 'name email')
             .sort({ createdAt: -1 });
-        
+
         const stats = {
             totalSwaps: swaps.length,
             pendingSwaps: swaps.filter(s => s.status === 'pending').length,
@@ -361,7 +366,7 @@ router.get('/reports/swap-stats/download', adminAuth, async (req, res) => {
             completionRate: swaps.length > 0 ? ((swaps.filter(s => s.status === 'completed').length / swaps.length) * 100).toFixed(2) : 0,
             averageRating: 0
         };
-        
+
         // Calculate average rating
         const ratedSwaps = swaps.filter(s => s.requesterRating || s.recipientRating);
         if (ratedSwaps.length > 0) {
@@ -379,13 +384,13 @@ router.get('/reports/swap-stats/download', adminAuth, async (req, res) => {
             });
             stats.averageRating = (totalRating / ratingCount).toFixed(2);
         }
-        
+
         if (format === 'csv') {
             const csvHeader = 'Swap ID,Requester,Recipient,Skill Offered,Skill Requested,Status,Created At,Completed At\n';
             const csvData = swaps.map(swap => {
                 return `"${swap._id}","${swap.requester.name}","${swap.recipient.name}","${swap.skillOffered}","${swap.skillRequested}","${swap.status}","${swap.createdAt}","${swap.completedAt || ''}"`;
             }).join('\n');
-            
+
             res.setHeader('Content-Type', 'text/csv');
             res.setHeader('Content-Disposition', 'attachment; filename=swap-stats-report.csv');
             res.send(csvHeader + csvData);
@@ -406,19 +411,19 @@ router.get('/analytics', adminAuth, async (req, res) => {
     try {
         const users = await User.find({});
         const swaps = await Swap.find({});
-        
+
         // User analytics
         const userAnalytics = {
             totalUsers: users.length,
             activeUsers: users.filter(u => !u.isBanned).length,
             bannedUsers: users.filter(u => u.isBanned).length,
             publicProfiles: users.filter(u => u.isPublic).length,
-            averageRating: users.length > 0 ? 
+            averageRating: users.length > 0 ?
                 (users.reduce((sum, u) => sum + u.rating, 0) / users.length).toFixed(2) : 0,
             usersWithSkills: users.filter(u => u.skillsOffered.length > 0).length,
             topSkills: getTopSkills(users)
         };
-        
+
         // Swap analytics
         const swapAnalytics = {
             totalSwaps: swaps.length,
@@ -429,11 +434,11 @@ router.get('/analytics', adminAuth, async (req, res) => {
                 rejected: swaps.filter(s => s.status === 'rejected').length,
                 cancelled: swaps.filter(s => s.status === 'cancelled').length
             },
-            completionRate: swaps.length > 0 ? 
+            completionRate: swaps.length > 0 ?
                 ((swaps.filter(s => s.status === 'completed').length / swaps.length) * 100).toFixed(2) : 0,
             averageRating: 0
         };
-        
+
         // Calculate average swap rating
         const ratedSwaps = swaps.filter(s => s.requesterRating || s.recipientRating);
         if (ratedSwaps.length > 0) {
@@ -451,7 +456,7 @@ router.get('/analytics', adminAuth, async (req, res) => {
             });
             swapAnalytics.averageRating = (totalRating / ratingCount).toFixed(2);
         }
-        
+
         res.json({
             userAnalytics,
             swapAnalytics,
@@ -471,11 +476,11 @@ function getTopSkills(users) {
             skillCount[skill] = (skillCount[skill] || 0) + 1;
         });
     });
-    
+
     return Object.entries(skillCount)
         .sort(([,a], [,b]) => b - a)
         .slice(0, 10)
         .map(([skill, count]) => ({ skill, count }));
 }
 
-module.exports = router; 
+module.exports = router;

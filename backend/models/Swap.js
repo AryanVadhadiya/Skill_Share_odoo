@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const config = require('../config');
 
 const swapSchema = new mongoose.Schema({
     requester: {
@@ -23,8 +24,8 @@ const swapSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'accepted', 'rejected', 'cancelled', 'completed'],
-        default: 'pending'
+        enum: config.swapStatus,
+        default: config.swapStatus[0]
     },
     message: {
         type: String,
@@ -47,4 +48,4 @@ const swapSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Swap', swapSchema); 
+module.exports = mongoose.model('Swap', swapSchema);

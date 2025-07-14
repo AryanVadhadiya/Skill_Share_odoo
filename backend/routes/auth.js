@@ -8,6 +8,8 @@ const path = require('path');
 // Add Cloudinary dependencies
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const config = require('../config');
+require('dotenv').config();
 
 // Configure Cloudinary
 cloudinary.config({
@@ -20,15 +22,24 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'profile_photos',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif'],
-    transformation: [{ width: 400, height: 400, crop: 'limit' }],
+    folder: process.env.CLOUDINARY_PROFILE_PHOTO_FOLDER || 'profile_photos',
+    allowed_formats: (process.env.CLOUDINARY_ALLOWED_FORMATS || 'jpg,jpeg,png,gif').split(','),
+    transformation: [
+      (() => {
+        const t = process.env.CLOUDINARY_IMAGE_TRANSFORMATION || 'width:400,height:400,crop:limit';
+        // Convert 'width:400,height:400,crop:limit' to { width: 400, height: 400, crop: 'limit' }
+        return Object.fromEntries(t.split(',').map(pair => {
+          const [k, v] = pair.split(':');
+          return [k.trim(), isNaN(v) ? v.trim() : Number(v)];
+        }));
+      })()
+    ],
   },
 });
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: (parseInt(process.env.CLOUDINARY_FILE_SIZE_LIMIT_MB, 10) || 5) * 1024 * 1024 }, // MB to bytes
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
@@ -83,7 +94,7 @@ router.post('/register', [
         const token = jwt.sign(
             { userId: user._id },
             process.env.JWT_SECRET || 'your-secret-key',
-            { expiresIn: '7d' }
+            { expiresIn: process.env.JWT_EXPIRY || '7d' }
         );
 
         // Return full user object (minus password)

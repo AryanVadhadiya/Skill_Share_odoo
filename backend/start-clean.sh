@@ -1,9 +1,11 @@
 #!/bin/bash
-# Kill any process using port 8088, then start the backend server
-PORT=8088
 
-# Find and kill process using the port
-lsof -ti tcp:$PORT | xargs kill -9 2>/dev/null
+# Load environment variables from .env if present
+if [ -f .env ]; then
+  export $(grep -v '^#' .env | xargs)
+fi
 
-# Start the backend server
-npm start
+PORT=${PORT:-5000}
+
+# Start the server on the specified port
+npx nodemon server.js --port $PORT

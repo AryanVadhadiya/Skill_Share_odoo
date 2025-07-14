@@ -1,43 +1,12 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs'); // <-- Add this line
+const config = require('../config');
 require('dotenv').config();
 
-// First 15 skills from the skills list
-const SKILLS = [
-  'Java',
-  'C++',
-  'Python',
-  'JavaScript',
-  'HTML',
-  'CSS',
-  'SQL',
-  'Excel',
-  'Photoshop',
-  'React',
-  'Node.js',
-  'Public Speaking',
-  'Writing',
-  'Project Management',
-  'Data Analysis'
-];
-
-// Sample locations
-const LOCATIONS = [
-  'New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix',
-  'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose',
-  'Austin', 'Jacksonville', 'Fort Worth', 'Columbus', 'Charlotte',
-  'San Francisco', 'Indianapolis', 'Seattle', 'Denver', 'Washington'
-];
-
-// Sample availability patterns
-const AVAILABILITY_PATTERNS = [
-  { weekdays: true, weekends: false, evenings: true, mornings: false },
-  { weekdays: false, weekends: true, evenings: false, mornings: true },
-  { weekdays: true, weekends: true, evenings: true, mornings: false },
-  { weekdays: true, weekends: false, evenings: false, mornings: true },
-  { weekdays: false, weekends: true, evenings: true, mornings: true }
-];
+const DUMMY_USER_PASSWORD = process.env.DUMMY_USER_PASSWORD || 'changeme';
+const DUMMY_USER_COUNT = parseInt(process.env.DUMMY_USER_COUNT, 10) || 10;
+const DUMMY_PROFILE_PHOTO_BASE = process.env.DUMMY_PROFILE_PHOTO_BASE || 'https://randomuser.me/api/portraits/';
 
 // Function to get random items from an array
 const getRandomItems = (array, min, max) => {
@@ -78,16 +47,16 @@ const createDummyUsers = async () => {
     const dummyUsers = [];
 
     // Create 25 dummy users
-    for (let i = 1; i <= 25; i++) {
-      const skillsOffered = getRandomItems(SKILLS, 2, 5);
-      const skillsWanted = getRandomItems(SKILLS.filter(skill => !skillsOffered.includes(skill)), 2, 4);
-      const availability = AVAILABILITY_PATTERNS[Math.floor(Math.random() * AVAILABILITY_PATTERNS.length)];
+    for (let i = 1; i <= DUMMY_USER_COUNT; i++) {
+      const skillsOffered = getRandomItems(config.skills, 2, 5);
+      const skillsWanted = getRandomItems(config.skills.filter(skill => !skillsOffered.includes(skill)), 2, 4);
+      const availability = config.availabilityPatterns[Math.floor(Math.random() * config.availabilityPatterns.length)];
 
       const dummyUser = {
         name: `Demo${i}`,
         email: `demo${i}@gmail.com`,
-        password: '12345678', // Will be hashed by the User model
-        location: LOCATIONS[Math.floor(Math.random() * LOCATIONS.length)],
+        password: DUMMY_USER_PASSWORD, // Will be hashed by the User model
+        location: config.locations[Math.floor(Math.random() * config.locations.length)],
         profilePhoto: getRandomProfilePhoto(), // Add random profile photo
         skillsOffered,
         skillsWanted,
