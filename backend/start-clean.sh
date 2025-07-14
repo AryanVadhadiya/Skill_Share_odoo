@@ -8,4 +8,4 @@ fi
 PORT=${PORT:-5000}
 
 # Start the server on the specified port
-npx nodemon server.js --port $PORT
+npx nodemon index.js --port $PORT

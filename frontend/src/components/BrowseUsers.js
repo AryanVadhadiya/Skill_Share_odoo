@@ -260,7 +260,7 @@ const BrowseUsers = () => {
         </form>
       </div>
 
-      {users.length === 0 ? (
+      {Array.isArray(users) && users.length === 0 ? (
         <div className="text-center">
           <p>No users found matching your criteria.</p>
         </div>

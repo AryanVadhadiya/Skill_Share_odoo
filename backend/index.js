@@ -13,8 +13,10 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://skill-swap-frontend.vercel.app',
-    'https://skill-swap-frontend-git-main.vercel.app'
+    'https://skill-share-odoofrontend-j8rndxo5k-aryan-vadhadiyas-projects.vercel.app',
+    'https://skill-share-odoo.vercel.app',
+    'https://skill-share-odoofrontend-1t4v9wy7v-aryan-vadhadiyas-projects.vercel.app',
+    // Add any other frontend domains you use
   ],
   credentials: true
 }));

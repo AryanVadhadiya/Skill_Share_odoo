@@ -4,7 +4,7 @@
   "description": "Backend for Skill Swap Platform",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "dev": "nodemon server.js",
     "add-dummy-users": "node scripts/addDummyUsers.js"
   },
