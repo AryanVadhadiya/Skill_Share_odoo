@@ -371,17 +371,25 @@ const SwapCard = ({
             <button
               onClick={() => onAction(swap._id, 'accept')}
               className="btn btn-success"
+              disabled={swap.status !== 'pending'}
             >
               Accept
             </button>
-                    <button
+            <button
               onClick={() => onAction(swap._id, 'reject')}
-                      className="btn btn-danger"
-                    >
+              className="btn btn-danger"
+              disabled={swap.status !== 'pending'}
+            >
               Reject
-                    </button>
-        </div>
-      )}
+            </button>
+          </div>
+        )}
+        {/* Show error if swap is not pending */}
+        {swap.status !== 'pending' && !isRequester && (
+          <div className="alert alert-warning" style={{ marginTop: '10px' }}>
+            This swap is no longer pending (current status: {swap.status}).
+          </div>
+        )}
 
         {swap.status === 'accepted' && (
           <button

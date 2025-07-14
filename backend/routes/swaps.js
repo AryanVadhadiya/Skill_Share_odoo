@@ -108,7 +108,7 @@ router.put('/:id/accept', auth, async (req, res) => {
         }
 
         if (swap.status !== config.swapStatus.pending) {
-            return res.status(400).json({ message: 'Swap is not pending' });
+            return res.status(400).json({ message: `Swap is not pending. Current status: ${swap.status}`, currentStatus: swap.status });
         }
 
         swap.status = config.swapStatus.accepted;
@@ -139,7 +139,7 @@ router.put('/:id/reject', auth, async (req, res) => {
         }
 
         if (swap.status !== config.swapStatus.pending) {
-            return res.status(400).json({ message: 'Swap is not pending' });
+            return res.status(400).json({ message: `Swap is not pending. Current status: ${swap.status}`, currentStatus: swap.status });
         }
 
         swap.status = config.swapStatus.rejected;
