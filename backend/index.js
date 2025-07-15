@@ -12,24 +12,31 @@ connectDB();
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://skill-share-odoo.vercel.app',
+  'https://skill-share-odoo-lcrc.vercel.app', // added new production frontend
+];
+
+// Regex for Vercel preview deployments
+const vercelPreviewRegex = /^https:\/\/skill-share-odoofrontend-.*-aryan-vadhadiyas-projects\.vercel\.app$/;
+
 app.use(cors({
   origin: function(origin, callback) {
-    const allowed = [
-      'http://localhost:3000',
-      'https://skill-share-odoo.vercel.app'
-    ];
-    // Allow all your Vercel preview subdomains
+    // Allow requests with no origin (like mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+
     if (
-      !origin ||
-      allowed.includes(origin) ||
-      /^https:\/\/skill-share-odoofrontend-.*-aryan-vadhadiyas-projects\.vercel\.app$/.test(origin)
+      allowedOrigins.includes(origin) ||
+      vercelPreviewRegex.test(origin)
     ) {
-      callback(null, true);
+      return callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.error('CORS denied for origin:', origin);
+      return callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
 }));
 
 app.use(express.json());
