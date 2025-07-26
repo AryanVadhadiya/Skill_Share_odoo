@@ -453,7 +453,7 @@ const Home = () => {
                       {user && (
                         <button
                           onClick={() => openRequestModal(userProfile)}
-                          className="btn btn-secondary"
+                          className="btn btn-primary"
                           style={{ marginLeft: '10px' }}
                         >
                           Send Request

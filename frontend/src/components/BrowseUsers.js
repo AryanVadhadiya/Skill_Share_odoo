@@ -334,7 +334,7 @@ const BrowseUsers = () => {
                 {currentUser && (
                   <button
                     onClick={() => openRequestModal(user)}
-                    className="btn btn-secondary"
+                    className="btn btn-primary"
                     style={{ marginLeft: '10px' }}
                   >
                     Send Request

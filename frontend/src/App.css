@@ -3528,3 +3528,171 @@ p {
 .star-btn.filled {
   color: #f59e0b;
 }
+
+/* --- Responsive Navbar --- */
+
+/* Hamburger menu button (hidden on desktop) */
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2.2rem;
+  color: #a855f7;
+  cursor: pointer;
+  margin-left: 1rem;
+  transition: color 0.18s;
+}
+
+@media (max-width: 900px) {
+  .navbar-toggle {
+    display: block;
+  }
+  .navbar-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .navbar-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100vw;
+    background: var(--bg-secondary);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    z-index: 2000;
+    padding: 0.5rem 0;
+    transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+    max-height: 0;
+    overflow: hidden;
+  }
+  .navbar-menu.open {
+    display: flex;
+    max-height: 500px;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 1.1rem 2rem;
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+    border-radius: 0;
+    border-left: 4px solid transparent;
+    border-bottom: 1px solid var(--border-color);
+    background: none;
+    margin: 0;
+  }
+  .nav-link.active, .nav-link:hover {
+    border-left: 4px solid #a855f7;
+    background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);
+    color: #fff;
+  }
+  .navbar-actions {
+    flex-direction: row;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+  .navbar-brand {
+    font-size: clamp(1.3rem, 5vw, 2.2rem);
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar-brand {
+    font-size: clamp(1.1rem, 7vw, 1.7rem);
+    padding-left: 0.5rem;
+  }
+  .nav-link {
+    font-size: clamp(0.98rem, 4vw, 1.08rem);
+    padding: 1rem 1.2rem;
+  }
+}
+
+/* Overlay for mobile menu */
+.navbar-overlay {
+  display: none;
+}
+@media (max-width: 900px) {
+  .navbar-overlay.open {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 27, 38, 0.55);
+    z-index: 1500;
+    transition: opacity 0.2s;
+  }
+}
+
+/* --- Responsive Container --- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(10px, 4vw, 32px);
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 8px;
+  }
+}
+
+/* --- Responsive Hero Section --- */
+.hero {
+  padding: clamp(32px, 8vw, 120px) clamp(8px, 5vw, 48px);
+  border-radius: clamp(16px, 4vw, 40px);
+  margin-bottom: clamp(24px, 8vw, 80px);
+}
+
+.hero h1 {
+  font-size: clamp(1.5rem, 7vw, 2.8rem);
+}
+
+.hero p, .hero-subtitle {
+  font-size: clamp(1rem, 4vw, 1.3rem);
+}
+
+/* --- Responsive User Grid --- */
+.user-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(12px, 3vw, 28px);
+}
+
+/* --- Responsive Buttons --- */
+.btn, .btn-primary, .btn-secondary {
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  padding: clamp(0.5rem, 2vw, 0.8rem) clamp(1rem, 4vw, 1.6rem);
+}
+
+/* --- Responsive Cards --- */
+.card, .feature-card, .user-card {
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: clamp(10px, 2vw, 24px);
+}
+
+/* --- Responsive Swaps Table --- */
+.swaps-table {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+}
+
+/* --- Responsive Form Controls --- */
+.form-control {
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  padding: clamp(0.5rem, 2vw, 0.8rem) clamp(1rem, 4vw, 1.6rem);
+}
+
+/* --- Responsive Section Titles --- */
+.section-title, h2, h3 {
+  font-size: clamp(1.2rem, 5vw, 2.1rem);
+}
