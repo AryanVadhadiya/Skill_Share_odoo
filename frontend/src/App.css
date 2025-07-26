@@ -502,6 +502,7 @@ p {
   background: linear-gradient(90deg, #c084fc 0%, #a855f7 100%) !important;
   border: 1.5px solid #fbeaff;
   box-shadow: 0 2px 16px rgba(168, 85, 247, 0.35);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.18);
 }
 
 .navbar-actions {
