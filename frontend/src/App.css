@@ -552,26 +552,102 @@ p {
 }
 
 [data-theme="dark"] .nav-link {
-  color: #f1f5f9;
+  color: var(--text-primary) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 
 [data-theme="dark"] .nav-link:hover {
-  color: #c084fc;
-  background: rgba(168, 85, 247, 0.15);
+  color: var(--primary) !important;
+  background: rgba(168, 85, 247, 0.18) !important;
+  text-shadow: 0 2px 8px rgba(168,85,247,0.25);
+}
+
+[data-theme="dark"] .nav-link.active {
+  color: white !important;
+  background: linear-gradient(90deg, var(--primary-dark), var(--primary)) !important;
+  box-shadow: 0 2px 12px rgba(168, 85, 247, 0.35);
+  border-radius: var(--radius-md);
 }
 
 [data-theme="dark"] .navbar-brand {
-  color: #f1f5f9;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  color: unset !important;
+  text-shadow: 0 2px 8px rgba(168,85,247,0.18);
 }
 
-[data-theme="dark"] .theme-toggle {
-  border-color: #475569;
-  color: #f1f5f9;
+.theme-toggle {
+  background: none;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
 }
 
-[data-theme="dark"] .theme-toggle:hover {
-  border-color: #c084fc;
-  background: rgba(168, 85, 247, 0.15);
+.theme-toggle:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: scale(1.05);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 2px solid var(--border-color);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  overflow: hidden;
+  margin: auto 0;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  border-color: var(--primary);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.logout-btn {
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.logout-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {
