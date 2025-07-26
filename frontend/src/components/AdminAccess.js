@@ -20,7 +20,8 @@ const AdminAccess = () => {
       return;
     }
 
-    if (adminKey !== 'Admin@odoo') {
+    // Robust admin key check: trim whitespace
+    if (adminKey.trim() !== 'Admin@odoo') {
       setMessage('Incorrect admin key');
       return;
     }
