@@ -406,13 +406,13 @@ p {
 
 /* Navbar Styles */
 .navbar {
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(24, 18, 38, 0.98); /* Solid, slightly translucent dark background for dark mode */
+  border-bottom: 1.5px solid #2d2250; /* Subtle border for separation */
   padding: 1rem 0;
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(10px);
+  /* No blur for clarity */
 }
 
 .navbar-content {
@@ -552,30 +552,37 @@ p {
 }
 
 [data-theme="dark"] .nav-link {
-  color: var(--text-primary) !important;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  color: #fff !important;
+  background: transparent;
+  text-shadow: none;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
 }
 
 [data-theme="dark"] .nav-link:hover {
-  color: var(--primary) !important;
+  color: #fff !important;
   background: rgba(168, 85, 247, 0.18) !important;
-  text-shadow: 0 2px 8px rgba(168,85,247,0.25);
+  border: 1.5px solid #a855f7;
+  text-shadow: none;
 }
 
 [data-theme="dark"] .nav-link.active {
-  color: white !important;
-  background: linear-gradient(90deg, var(--primary-dark), var(--primary)) !important;
-  box-shadow: 0 2px 12px rgba(168, 85, 247, 0.35);
+  color: #fff !important;
+  background: linear-gradient(90deg, #a855f7, #c084fc) !important;
+  box-shadow: 0 2px 16px rgba(168, 85, 247, 0.45);
   border-radius: var(--radius-md);
+  border: 1.5px solid #c084fc;
 }
 
 [data-theme="dark"] .navbar-brand {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
-  color: unset !important;
+  background: none;
+  color: #fff !important;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+  text-fill-color: unset;
+  font-weight: 900;
+  letter-spacing: 1.5px;
   text-shadow: 0 2px 8px rgba(168,85,247,0.18);
 }
 
