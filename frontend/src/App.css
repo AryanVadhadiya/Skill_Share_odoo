@@ -2819,7 +2819,6 @@ p {
 }
 
 [data-theme="dark"] .nav-link.active {
-  color: var(--primary-dark) !important;
   background: var(--primary-light) !important;
 }
 
